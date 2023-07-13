@@ -1,0 +1,101 @@
+package selenium.test.threadsnet;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Scanner;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import selenium.classes.base.SeleniumPackages;
+
+public class InstagramDetailsScrapping {
+
+	public static void instagramUsername(String un) throws InterruptedException, IOException {
+		SeleniumPackages.chromeDriverLaunch();
+		SeleniumPackages.launchUrl("https://www.instagram.com/" + un);
+		try {
+			WebElement wrong_user = SeleniumPackages.locator(By.xpath("//*[starts-with(text(),'Sorry')]"));
+			String wu = wrong_user.getText();
+			boolean wu_check = wu.startsWith("Sorry");
+			if (wu_check) {
+				SeleniumPackages.closeEntireDriver();
+				System.out.println("Username not available !!");
+			}
+		} catch (Exception e) {
+
+			System.out.println("Username : " + un);
+			SeleniumPackages.pageWaitBasedOnNetwork(5000);
+
+			WebElement total_posts = SeleniumPackages.locator(By.xpath("(//li[@class])[1]"));
+			String tp = total_posts.getText();
+			System.out.println("Total Posts of " + un + " is " + tp);
+
+			WebElement total_followers = SeleniumPackages.locator(By.xpath("(//li[@class])[2]"));
+			String tf = total_followers.getText();
+			System.out.println("Total Followers of " + un + " is " + tf);
+
+			WebElement total_following = SeleniumPackages.locator(By.xpath("(//li[@class])[3]"));
+			String tfg = total_following.getText();
+			System.out.println(un + " who following accounts : " + tfg);
+
+			WebElement name = SeleniumPackages.locator(By.xpath("(//span[@dir])[1]"));
+			String un_name = name.getText();
+			System.out.println("Name of " + un + " is " + un_name);
+
+			WebElement bio = SeleniumPackages.locator(By.xpath("//h1[@dir]"));
+			String un_bio = bio.getText();
+			System.out.println(un + "'s bio : ");
+			System.out.println(un_bio);
+			SeleniumPackages.pageWaitBasedOnNetwork(20000);
+			List<WebElement> posts_photos = SeleniumPackages.locatorList(By.xpath("//div[@class='_aagv']"));
+			int image[] = new int[posts_photos.size()];
+			int count = 1;
+			for (int i = 0; i < image.length; i++) {
+				image[i] = count;
+				count++;
+			}
+			System.out.println("Fetching "+image.length+" images links and screenshot ...");
+			File file = new File("/home/kumaresan/Documents/TestScreenshots/"+un+"");
+			for (int i = 1; i <= posts_photos.size(); i++) {
+
+				List<WebElement> photos = SeleniumPackages.locatorList(posts_photos,
+						By.xpath("(//div[@class='_aagv'])[" + i + "]"));
+				List<WebElement> photos_links = SeleniumPackages.locatorList(photos,
+						By.xpath("(//div[@class='_aagv'])[" + i + "]/img[@src]"));
+
+				SeleniumPackages.minimizeWindow();
+//						  Scanner input2 = new Scanner(System.in);
+//						  image[i] = input2.nextInt();
+				for (WebElement pp : photos_links) {
+
+					System.out.println("Post Image " + i + " : " + pp.getAttribute("src"));
+					String urls = pp.getAttribute("src");
+					SeleniumPackages.launchUrl(urls);
+					
+					SeleniumPackages.takeScreenshot(SeleniumPackages.driver,
+							"/home/kumaresan/Documents/TestScreenshots/"+un+"/" + image[i - 1] + ".png");
+					SeleniumPackages.pageWaitTill(3000);
+					SeleniumPackages.backPage();
+
+				}
+			}
+		}
+
+		System.out.println("\nInstagram Details Scrapped Successfully *");
+		SeleniumPackages.pageWaitTill(2000);
+		SeleniumPackages.closeEntireDriver();
+
+	}
+
+	public static void main(String[] args) throws InterruptedException, IOException {
+
+		SeleniumPackages.setSystemEnvironment("chrome", "drivers/chromedriver");
+		System.out.println("Enter Instagram User Id : ");
+		Scanner un = new Scanner(System.in);
+		String username = un.next();
+		instagramUsername(username);
+	}
+
+}
