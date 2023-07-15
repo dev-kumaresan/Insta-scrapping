@@ -51,12 +51,12 @@ public class InstagramDetailsScrapping {
 			SeleniumPackages.pageWaitBasedOnNetwork(20000);
 			List<WebElement> posts_photos = SeleniumPackages.locatorList(By.xpath("//div[@class='_aagv']"));
 			int image[] = new int[posts_photos.size()];
-			int count = 1;
+			int file_name = 1;
 			for (int i = 0; i < image.length; i++) {
-				image[i] = count;
-				count++;
+				image[i] = file_name;
+				file_name++;
 			}
-			System.out.println("Fetching "+image.length+" images links and screenshot ...");
+			System.out.println("\nFetching "+image.length+" images links and take shots ...");
 			File file = new File("/home/kumaresan/Documents/TestScreenshots/"+un+"");
 			for (int i = 1; i <= posts_photos.size(); i++) {
 
@@ -83,7 +83,7 @@ public class InstagramDetailsScrapping {
 			}
 		}
 
-		System.out.println("\nInstagram Details Scrapped Successfully *");
+		System.out.println("\n"+un+" Details Scrapped Successfully *");
 		SeleniumPackages.pageWaitTill(2000);
 		SeleniumPackages.closeEntireDriver();
 
@@ -92,10 +92,24 @@ public class InstagramDetailsScrapping {
 	public static void main(String[] args) throws InterruptedException, IOException {
 
 		SeleniumPackages.setSystemEnvironment("chrome", "drivers/chromedriver");
-		System.out.println("Enter Instagram User Id : ");
+		System.out.println("Enter number of Instagram User Id to scrap : ");
+		Scanner in1 = new Scanner(System.in);
+		int no_of_ids = in1.nextInt();
+		System.out.println("Enter "+no_of_ids+" IDs :- ");
 		Scanner un = new Scanner(System.in);
-		String username = un.next();
-		instagramUsername(username);
+		String username[] = new String[no_of_ids];
+		for(int i=0;i<no_of_ids;i++)
+		{
+			username[i] = un.next();
+			
+		}
+		for(int i=0;i<no_of_ids;i++)
+		{
+			instagramUsername(username[i]);
+			SeleniumPackages.closeEntireDriver();
+			SeleniumPackages.pageWaitTill(2000);
+		}
+		
 	}
 
 }
