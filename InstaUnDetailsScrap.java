@@ -13,7 +13,7 @@ import selenium.classes.base.SeleniumPackages;
 public class InstagramDetailsScrapping {
 
 	public static void instagramUsername(String un) throws InterruptedException, IOException {
-		SeleniumPackages.chromeDriverGet();
+		SeleniumPackages.chromeDriverLaunch();
 		SeleniumPackages.launchUrl("https://www.instagram.com/" + un);
 		try {
 			WebElement wrong_user = SeleniumPackages.locator(By.xpath("//*[starts-with(text(),'Sorry')]"));
