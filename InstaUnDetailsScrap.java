@@ -9,9 +9,19 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import selenium.classes.base.SeleniumPackages;
-
+/**
+*
+* Copyright © 2023 Kumaresan L
+* @author kumaresan
+* 
+*/
 public class InstagramDetailsScrapping {
-
+	/**
+        *
+	* @author kumaresan
+        * instagramUsername(String) method - to get and reterive information from instagram account 
+	*
+	*/
 	public static void instagramUsername(String un) throws InterruptedException, IOException {
 		SeleniumPackages.chromeDriverLaunch();
 		SeleniumPackages.launchUrl("https://www.instagram.com/" + un);
@@ -27,27 +37,52 @@ public class InstagramDetailsScrapping {
 
 			System.out.println("Username : " + un);
 			SeleniumPackages.pageWaitBasedOnNetwork(5000);
-
+			/**
+			* @author kumaresan
+                        * get and reterive the total posts count in the instagram account using getText() method and locator xpath.
+			*
+	                */
 			WebElement total_posts = SeleniumPackages.locator(By.xpath("(//li[@class])[1]"));
 			String tp = total_posts.getText();
 			System.out.println("Total Posts of " + un + " is " + tp);
-
+			/**
+			* @author kumaresan
+                        * get and reterive the total followers count in the instagram account using getText() method and locator xpath.
+			*
+			*/
 			WebElement total_followers = SeleniumPackages.locator(By.xpath("(//li[@class])[2]"));
 			String tf = total_followers.getText();
 			System.out.println("Total Followers of " + un + " is " + tf);
-
+			/**
+			* @author kumaresan
+                        * get and reterive the total following count in the instagram account using getText() method and locator xpath.
+			*
+			*/
 			WebElement total_following = SeleniumPackages.locator(By.xpath("(//li[@class])[3]"));
 			String tfg = total_following.getText();
 			System.out.println(un + " who following accounts : " + tfg);
-
+			/**
+			* @author kumaresan
+                        * get and reterive the name in the instagram account using getText() method and locator xpath.
+			*
+			*/
 			WebElement name = SeleniumPackages.locator(By.xpath("(//span[@dir])[1]"));
 			String un_name = name.getText();
 			System.out.println("Name of " + un + " is " + un_name);
-
+			/**
+			* @author kumaresan
+                        * get and reterive the bio information in the instagram account using getText() method and locator xpath.
+			*
+			*/
 			WebElement bio = SeleniumPackages.locator(By.xpath("//h1[@dir]"));
 			String un_bio = bio.getText();
 			System.out.println(un + "'s bio : ");
 			System.out.println(un_bio);
+			/**
+			* @author kumaresan
+                        * get and reterive the posts links and screenshots in the instagram account and save it to the mentioned folder path.
+			*
+			*/
 			SeleniumPackages.pageWaitBasedOnNetwork(20000);
 			List<WebElement> posts_photos = SeleniumPackages.locatorList(By.xpath("//div[@class='_aagv']"));
 			int image[] = new int[posts_photos.size()];
@@ -88,7 +123,11 @@ public class InstagramDetailsScrapping {
 		SeleniumPackages.closeEntireDriver();
 
 	}
-
+	/**
+	* @author kumaresan
+        * getting no.of.usernames count and usernames, based on that the instagramUsername(String) method get invoked.
+	*
+	*/
 	public static void main(String[] args) throws InterruptedException, IOException {
 
 		SeleniumPackages.setSystemEnvironment("chrome", "drivers/chromedriver");
